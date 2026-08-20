@@ -1,0 +1,42 @@
+services:
+  postgres-pagila:
+    image: pgvector/pgvector:pg15
+    container_name: postgres_pagila
+    environment:
+      POSTGRES_DB: pagila
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pagila_data:/var/lib/postgresql/data
+
+  postgres-sakila:
+    image: pgvector/pgvector:pg15
+    container_name: postgres_sakila
+    environment:
+      POSTGRES_DB: sakila
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5433:5432"
+    volumes:
+      - sakila_data:/var/lib/postgresql/data
+
+  airflow-standalone:
+    image: apache/airflow:2.8.1-python3.10
+    container_name: airflow_app
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./sql:/opt/airflow/sql
+    ports:
+      - "8082:8080"
+    command: standalone
+
+volumes:
+  pagila_data:
+  sakila_data:
