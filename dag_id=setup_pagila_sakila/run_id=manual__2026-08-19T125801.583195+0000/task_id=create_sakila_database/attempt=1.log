@@ -1,0 +1,14 @@
+[2026-08-19T12:58:02.360+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: setup_pagila_sakila.create_sakila_database manual__2026-08-19T12:58:01.583195+00:00 [queued]>
+[2026-08-19T12:58:02.368+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: setup_pagila_sakila.create_sakila_database manual__2026-08-19T12:58:01.583195+00:00 [queued]>
+[2026-08-19T12:58:02.369+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2026-08-19T12:58:02.382+0000] {taskinstance.py:2191} INFO - Executing <Task(_PythonDecoratedOperator): create_sakila_database> on 2026-08-19 12:58:01.583195+00:00
+[2026-08-19T12:58:02.387+0000] {standard_task_runner.py:60} INFO - Started process 376 to run task
+[2026-08-19T12:58:02.390+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'setup_pagila_sakila', 'create_sakila_database', 'manual__2026-08-19T12:58:01.583195+00:00', '--job-id', '9', '--raw', '--subdir', 'DAGS_FOLDER/setup_pagila_sakila.py', '--cfg-path', '/tmp/tmphwimhe0q']
+[2026-08-19T12:58:02.393+0000] {standard_task_runner.py:88} INFO - Job 9: Subtask create_sakila_database
+[2026-08-19T12:58:02.451+0000] {task_command.py:423} INFO - Running <TaskInstance: setup_pagila_sakila.create_sakila_database manual__2026-08-19T12:58:01.583195+00:00 [running]> on host 6a0c4989d770
+[2026-08-19T12:58:02.519+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='z10n' AIRFLOW_CTX_DAG_ID='setup_pagila_sakila' AIRFLOW_CTX_TASK_ID='create_sakila_database' AIRFLOW_CTX_EXECUTION_DATE='2026-08-19T12:58:01.583195+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-08-19T12:58:01.583195+00:00'
+[2026-08-19T12:58:02.568+0000] {base.py:83} INFO - Using connection ID 'postgres_default' for task execution.
+[2026-08-19T12:58:02.667+0000] {python.py:201} INFO - Done. Returned value was: sakila database created
+[2026-08-19T12:58:02.688+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=setup_pagila_sakila, task_id=create_sakila_database, execution_date=20260819T125801, start_date=20260819T125802, end_date=20260819T125802
+[2026-08-19T12:58:02.725+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-08-19T12:58:02.746+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check
