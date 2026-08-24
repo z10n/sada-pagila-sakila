@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: dim_film
+    description: "Unified film dimension table"
+    columns:
+      - name: global_film_id
+        description: "Primary key for film dimension"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_actor
+    description: "Unified actor dimension table"
+    columns:
+      - name: global_actor_id
+        description: "Primary key for actor dimension"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_customer
+    description: "Unified customer dimension table"
+    columns:
+      - name: global_customer_id
+        description: "Primary key for customer dimension"
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_rental
+    description: "Rental transactions fact table"
+    columns:
+      - name: global_rental_id
+        description: "Primary key for rental fact"
+        tests:
+          - unique
+          - not_null
