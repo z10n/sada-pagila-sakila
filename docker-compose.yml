@@ -26,6 +26,8 @@ services:
   airflow-standalone:
     image: apache/airflow:2.8.1-python3.10
     container_name: airflow_app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
@@ -33,6 +35,8 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
       - ./sql:/opt/airflow/sql
+      - ./dbt_transform:/opt/airflow/dbt_transform
+      - ~/.dbt:/opt/airflow/.dbt
     ports:
       - "8082:8080"
     command: standalone
