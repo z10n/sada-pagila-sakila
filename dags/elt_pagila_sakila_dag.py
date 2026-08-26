@@ -1,3 +1,10 @@
+"""ELT Pipeline DAG for Pagila and Sakila Data Sources.
+
+This module orchestrates an end-to-end ELT pipeline by triggering parallel data
+replication jobs via the Airbyte API, running Snowflake data transformations using
+dbt, and executing dbt data quality tests inside an isolated virtual environment.
+"""
+
 import json
 import urllib.request
 import urllib.error
@@ -23,9 +30,23 @@ AIRBYTE_CLIENT_SECRET = 'xmjVCIEiIpOnXPRJbieFD0yT3I9Xjdzb'
 PAGILA_CONN_ID = 'c00b1195-b621-4ab9-b3ab-9416580dee19'
 SAKILA_CONN_ID = '78d337b3-9983-4b83-a789-2fd36edd2725'
 
+
 @task
 def trigger_airbyte_sync(connection_id: str):
-    """Fetches OAuth token and triggers Airbyte synchronization using pure Python."""
+    """Fetches an OAuth token and triggers an Airbyte connection sync via API.
+
+    Authenticates against the Airbyte API using client credentials, retrieves an
+    access token, and sends an asynchronous request to start the replication process
+    for the specified connection. Gracefully ignores HTTP 409 Conflict if a sync
+    job is already active.
+
+    Args:
+        connection_id: The unique identifier (GUID) of the target Airbyte connection.
+
+    Raises:
+        ValueError: If the OAuth access token cannot be obtained from the response.
+        RuntimeError: If the Airbyte sync request returns an unexpected HTTP status code.
+    """
     # 1. Request access token
     token_url = f"{AIRBYTE_HOST}/api/v1/applications/token"
     token_payload = json.dumps({
@@ -83,6 +104,16 @@ def trigger_airbyte_sync(connection_id: str):
     tags=['elt', 'snowflake', 'dbt', 'airbyte'],
 )
 def elt_pagila_sakila_pipeline():
+    """Defines the workflow schedule and task dependency chain for the ELT pipeline.
+
+    Workflow Architecture:
+        1. `airbyte_sync_pagila` & `airbyte_sync_sakila`: Concurrently trigger syncs
+           for Pagila and Sakila sources using the custom task decorator.
+        2. `dbt_run_transformations`: Executes `dbt run` inside the isolated virtual
+           environment to build staging, intermediate, mart, and analytics layers.
+        3. `dbt_test_quality`: Runs `dbt test` to check primary key constraints,
+           null values, and referential integrity across created models.
+    """
 
     # Trigger Airbyte syncs in parallel
     sync_pagila = trigger_airbyte_sync.override(task_id='airbyte_sync_pagila')(PAGILA_CONN_ID)
